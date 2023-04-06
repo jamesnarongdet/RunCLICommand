@@ -1,0 +1,32 @@
+package com.james.encode;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class RunCLICommand {
+    public static void main(String[] args) throws IOException {
+        // Command to execute
+        String command = "java -version";
+
+        // Start the process
+        ProcessBuilder builder = new ProcessBuilder(command.split("\\s+"));
+        builder.redirectErrorStream(true);
+        Process process = builder.start();
+
+        // Read the output
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            System.out.println(line);
+        }
+
+        // Wait for the process to complete
+        try {
+            int exitCode = process.waitFor();
+            System.out.println("Process exited with code " + exitCode);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
